@@ -1,62 +1,1125 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="KRAFS — Kreating Real Art From Scratch. Boston streetwear.">
-<title>KRAFS | Kreating Real Art From Scratch</title>
-<link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KRAFS — Boston</title>
+<meta name="description" content="KRAFS. Independent streetwear from Boston, Massachusetts." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   RESET + TOKENS
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  font-feature-settings: 'ss01', 'cv11', 'tnum';
+}
+img, svg { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+
+:root {
+  --ink:    #0a0a0a;
+  --paper:  #ffffff;
+  --fog:    #f4f4f2;
+  --stone:  #e8e6e1;
+  --line:   #d9d7d2;
+  --mute:   #7a7a76;
+  --dark:   #171717;
+
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --stack:  clamp(4rem, 9vw, 7rem);
+}
+
+::selection { background: var(--ink); color: var(--paper); }
+
+/* ============================================================
+   ANNOUNCE — minimal
+   ============================================================ */
+.announce {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 11px var(--gutter);
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 400;
+  position: relative;
+}
+.announce__prev, .announce__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 8px;
+  opacity: 0.4;
+  font-size: 0.85rem;
+  transition: opacity 0.15s ease;
+}
+.announce__prev { left: var(--gutter); }
+.announce__next { right: var(--gutter); }
+.announce__prev:hover, .announce__next:hover { opacity: 1; }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 100;
+}
+.header__row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 1.35rem var(--gutter);
+  gap: 2rem;
+}
+.logo {
+  justify-self: start;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  padding-left: 0.4em; /* optical balance for tracked caps */
+  text-transform: uppercase;
+  display: inline-block;
+}
+.nav {
+  justify-self: center;
+  display: flex;
+  gap: clamp(1.5rem, 3vw, 3rem);
+}
+.nav a {
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 0;
+  position: relative;
+  color: var(--dark);
+  transition: color 0.15s ease;
+}
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 100%; bottom: 0;
+  height: 1px;
+  background: var(--ink);
+  transition: right 0.25s ease;
+}
+.nav a:hover::after { right: 0; }
+
+.utility {
+  justify-self: end;
+  display: flex;
+  gap: 1.4rem;
+  align-items: center;
+}
+.utility button {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: opacity 0.15s ease;
+}
+.utility button:hover { opacity: 0.55; }
+.icon { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.4; }
+.bag__count { font-variant-numeric: tabular-nums; }
+
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .header__row { grid-template-columns: auto auto; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  background: var(--ink);
+  color: var(--paper);
+  min-height: min(92vh, 900px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+.hero__bg {
+  position: absolute; inset: 0;
+  z-index: 0;
+}
+.hero__bg svg { width: 100%; height: 100%; }
+
+.hero__top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 2;
+  padding: var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.hero__bottom {
+  position: relative;
+  z-index: 2;
+  padding: var(--gutter);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 2rem;
+}
+.hero__meta {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 1.75rem;
+}
+.hero__title {
+  font-size: clamp(2.5rem, 6.5vw, 6rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  max-width: 18ch;
+}
+.hero__cta {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  transition: border-color 0.2s ease, gap 0.2s ease;
+  white-space: nowrap;
+}
+.hero__cta:hover { border-color: var(--paper); gap: 1rem; }
+
+@media (max-width: 700px) {
+  .hero__bottom { grid-template-columns: 1fr; }
+  .hero__cta { justify-self: start; }
+}
+
+/* ============================================================
+   SECTION SCAFFOLD
+   ============================================================ */
+.section { padding: var(--stack) var(--gutter); }
+.section--fog { background: var(--fog); }
+.section--ink { background: var(--ink); color: var(--paper); }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 1.25rem;
+}
+.eyebrow__num {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  font-weight: 500;
+}
+.section--ink .eyebrow { color: rgba(255,255,255,0.55); }
+.section--ink .eyebrow__num { color: var(--paper); }
+
+.section__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.section--ink .section__head { border-color: rgba(255,255,255,0.15); }
+.section__title {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+.section__link {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  white-space: nowrap;
+  padding-bottom: 3px;
+  border-bottom: 1px solid currentColor;
+  transition: opacity 0.15s ease;
+}
+.section__link:hover { opacity: 0.55; }
+.section__link::after { content: "→"; font-weight: 400; }
+
+/* ============================================================
+   EDITORIAL SPLIT
+   ============================================================ */
+.split {
+  display: grid;
+  grid-template-columns: 5fr 4fr;
+  align-items: stretch;
+  min-height: 70vh;
+}
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+
+.split__image {
+  background: var(--stone);
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+}
+.split__image svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.split__caption {
+  position: absolute;
+  bottom: 1.25rem; left: 1.25rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  opacity: 0.75;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+.split__text {
+  background: var(--paper);
+  padding: clamp(2.5rem, 6vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.75rem;
+}
+.split__title {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.split__body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--mute);
+  max-width: 46ch;
+}
+.split__cta {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ink);
+  transition: opacity 0.15s ease;
+}
+.split__cta:hover { opacity: 0.55; }
+.split__cta::after { content: "  →"; }
+
+/* ============================================================
+   PRODUCT GRID
+   ============================================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1rem, 2.5vw, 2.5rem) clamp(1rem, 2vw, 2rem);
+}
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+.card { position: relative; }
+.card__media {
+  aspect-ratio: 4 / 5;
+  background: var(--fog);
+  position: relative;
+  overflow: hidden;
+}
+.section--ink .card__media { background: var(--dark); }
+.card__placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: rgba(10,10,10,0.2);
+  text-transform: uppercase;
+}
+.section--ink .card__placeholder { color: rgba(255,255,255,0.15); }
+
+.card__quick {
+  position: absolute;
+  left: 12px; right: 12px; bottom: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.85rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.15s ease, color 0.15s ease;
+}
+.card:hover .card__quick,
+.card:focus-within .card__quick {
+  opacity: 1;
+  transform: translateY(0);
+}
+.card__quick:hover { background: var(--ink); color: var(--paper); }
+
+.card__tag {
+  position: absolute;
+  top: 12px; left: 12px;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  z-index: 2;
+}
+.section--ink .card__tag { color: var(--paper); }
+
+.card__info {
+  padding: 1.1rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.card__name {
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+.card__price {
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: var(--mute);
+}
+.section--ink .card__price { color: rgba(255,255,255,0.65); }
+.card__swatches {
+  display: flex; gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.card__swatch {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+}
+.section--ink .card__swatch { border-color: rgba(255,255,255,0.25); }
+.sw-blk { background: #0f0f0f; }
+.sw-wht { background: #ffffff; }
+.sw-cha { background: #3a3a38; }
+.sw-oat { background: #d8d3c7; }
+.sw-nav { background: #1e2438; }
+.sw-oli { background: #4a4f3a; }
+
+/* ============================================================
+   CATEGORY TILES
+   ============================================================ */
+.cats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+}
+@media (max-width: 800px) { .cats { grid-template-columns: 1fr; } }
+
+.cat {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--dark);
+  color: var(--paper);
+  display: block;
+}
+.cat__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cat__overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 50%);
+  z-index: 1;
+}
+.cat__top {
+  position: absolute;
+  top: 1.5rem; left: 1.5rem; right: 1.5rem;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.cat__label {
+  position: absolute;
+  left: 1.5rem; bottom: 1.5rem;
+  z-index: 2;
+  display: flex; align-items: baseline; gap: 0.75rem;
+}
+.cat__name {
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+.cat__arrow {
+  font-size: 1rem;
+  opacity: 0.7;
+  transition: transform 0.25s ease, opacity 0.15s ease;
+}
+.cat:hover .cat__arrow { transform: translateX(6px); opacity: 1; }
+
+/* ============================================================
+   EDITORIAL BAND / QUOTE
+   ============================================================ */
+.band {
+  position: relative;
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--stack) var(--gutter);
+  background: var(--ink);
+  color: var(--paper);
+  overflow: hidden;
+  text-align: center;
+}
+.band__bg { position: absolute; inset: 0; z-index: 0; }
+.band__bg svg { width: 100%; height: 100%; }
+.band__bg::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: rgba(10,10,10,0.5);
+}
+.band__inner { position: relative; z-index: 2; max-width: 780px; }
+.band__quote {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 300;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin-bottom: 2rem;
+}
+.band__rule {
+  width: 40px; height: 1px;
+  background: var(--paper);
+  opacity: 0.5;
+  margin: 0 auto 1.25rem;
+}
+.band__attr {
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+/* ============================================================
+   FEATURE — season / campaign
+   ============================================================ */
+.feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 80vh;
+}
+@media (max-width: 900px) { .feature { grid-template-columns: 1fr; } }
+.feature__image {
+  background: var(--stone);
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+  order: 2;
+}
+@media (max-width: 900px) { .feature__image { order: 1; } }
+.feature__image svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.feature__text {
+  background: var(--paper);
+  color: var(--ink);
+  padding: clamp(2.5rem, 6vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  order: 1;
+  border-right: 1px solid var(--line);
+}
+@media (max-width: 900px) {
+  .feature__text { order: 2; border-right: 0; border-top: 1px solid var(--line); }
+}
+.feature__title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.feature__body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--mute);
+  max-width: 42ch;
+}
+.feature__cta {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ink);
+  transition: opacity 0.15s ease;
+}
+.feature__cta:hover { opacity: 0.55; }
+.feature__cta::after { content: "  →"; }
+
+/* ============================================================
+   LOOKBOOK STRIP
+   ============================================================ */
+.lookbook { padding: var(--stack) var(--gutter); }
+.lookbook__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+@media (max-width: 900px) { .lookbook__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 500px) { .lookbook__grid { grid-template-columns: repeat(2, 1fr); } }
+
+.look {
+  aspect-ratio: 1 / 1;
+  background: var(--fog);
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.15s ease;
+}
+.look:hover { opacity: 0.85; }
+.look svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ============================================================
+   NEWSLETTER
+   ============================================================ */
+.news {
+  padding: var(--stack) var(--gutter);
+  text-align: center;
+  border-top: 1px solid var(--line);
+}
+.news__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+.news__sub {
+  color: var(--mute);
+  font-size: 1rem;
+  margin-bottom: 2.5rem;
+  max-width: 44ch;
+  margin-left: auto; margin-right: auto;
+}
+.news__form {
+  display: flex;
+  max-width: 480px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--ink);
+}
+.news__input {
+  flex: 1;
+  padding: 0.9rem 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  outline: none;
+}
+.news__input::placeholder { color: var(--mute); }
+.news__submit {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 0 0.5rem;
+  transition: opacity 0.15s ease;
+}
+.news__submit::after { content: "  →"; }
+.news__submit:hover { opacity: 0.55; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: var(--ink);
+  color: var(--paper);
+  padding: clamp(4rem, 7vw, 6rem) var(--gutter) 2rem;
+}
+.footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+@media (max-width: 900px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
+
+.footer__brand {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  padding-left: 0.4em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+.footer__tag {
+  opacity: 0.55;
+  max-width: 34ch;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.footer__col h4 {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+.footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+.footer__col a {
+  font-size: 0.875rem;
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+.footer__col a:hover { opacity: 1; }
+
+.footer__base {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.68rem;
+  opacity: 0.4;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}
+:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* Uploaded KRAFS imagery */
+.site-photo {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+.hero-photo {filter:brightness(.62);}
+.split__image .site-photo,.feature__image .site-photo,.cat .site-photo,.band__bg .site-photo,.look .site-photo {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.card__media .site-photo {position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:6%;}
+.band__bg .site-photo {filter:brightness(.7);}
+</style>
 </head>
 <body>
-<div class="topbar"><span>←</span><b>FREE SHIPPING ON ORDERS OVER $100</b><span>BOSTON, MA &nbsp; | &nbsp; CREATE DIFFERENT.</span></div>
-<header>
-<a class="brand" href="#">KRAFS<small>KREATING REAL ART FROM SCRATCH</small></a>
-<button class="menu" aria-label="Menu">☰</button>
-<nav><a href="#new">NEW DROPS</a><a href="#categories">MEN</a><a href="#categories">WOMEN</a><a href="#originals">KRAFS ORIGINALS</a><a href="#categories">ACCESSORIES</a><a href="#new">SALE</a></nav>
-<div class="icons"><button>⌕</button><button>♙</button><button id="bag">▢ <sup>0</sup></button></div>
+
+<!-- ============================================================
+     ANNOUNCE
+     ============================================================ -->
+<div class="announce" role="region" aria-label="Announcements">
+  <button class="announce__prev" aria-label="Previous announcement">←</button>
+  <span>Complimentary shipping on all orders over $150</span>
+  <button class="announce__next" aria-label="Next announcement">→</button>
+</div>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="header">
+  <div class="header__row">
+    <a href="/" class="logo" aria-label="KRAFS home">KRAFS</a>
+
+    <nav class="nav" aria-label="Primary">
+      <a href="#new">New</a>
+      <a href="#men">Men</a>
+      <a href="#women">Women</a>
+      <a href="#collections">Collections</a>
+      <a href="#accessories">Accessories</a>
+      <a href="#journal">Journal</a>
+    </nav>
+
+    <div class="utility">
+      <button aria-label="Search">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      </button>
+      <button aria-label="Account">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+      </button>
+      <button aria-label="Bag, 0 items">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="bag__count">(0)</span>
+      </button>
+    </div>
+  </div>
 </header>
 
-<main>
-<section class="hero">
-<img src="assets/images/hero-krafs.jpg" alt="KRAFS graffiti streetwear campaign">
-<a class="hero-button" href="#new">SHOP THE COLLECTION →</a>
+<!-- ============================================================
+     HERO
+     Replace .hero__bg contents with an <img> tag when ready.
+     ============================================================ -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__bg" aria-hidden="true"><img src="images/hero.jpg" alt="" class="site-photo hero-photo"></div>
+
+  <div class="hero__top">
+    <span>Vol. 04 — Fall / Winter 2026</span>
+    <span>Boston, MA</span>
+  </div>
+
+  <div class="hero__bottom">
+    <div>
+      <div class="hero__meta">The New Collection · Now Available</div>
+      <h1 class="hero__title" id="hero-title">
+        Considered pieces for the way the city moves.
+      </h1>
+    </div>
+    <a href="#new" class="hero__cta">Shop the collection →</a>
+  </div>
 </section>
 
-<section id="categories" class="category-wrap">
-<img src="assets/images/categories.jpg" alt="KRAFS Men Women Hoodies T-Shirts and Accessories categories">
-<div class="category-links">
-<a href="#new">SHOP MEN →</a><a href="#new">SHOP WOMEN →</a><a href="#new">SHOP HOODIES →</a><a href="#new">SHOP T-SHIRTS →</a><a href="#new">SHOP ACCESSORIES →</a>
-</div>
+<!-- ============================================================
+     EDITORIAL SPLIT
+     ============================================================ -->
+<section class="split" aria-labelledby="split-title">
+  <div class="split__image" role="img" aria-label="KRAFS editorial fashion photography"><img src="images/story.jpg" alt="KRAFS editorial photography" loading="lazy" class="site-photo">
+    <span class="split__caption">Photographed in Roxbury</span>
+  </div>
+  <div class="split__text">
+    <span class="eyebrow"><span class="eyebrow__num">01</span> The Story</span>
+    <h2 class="split__title" id="split-title">A small studio. A short list of pieces. A slow way of working.</h2>
+    <p class="split__body">
+      KRAFS is an independent label operating out of Boston, Massachusetts. Each release is a considered edit of pieces we wanted to wear ourselves — heavyweight fleece, natural fibers, cut for the way the city actually moves. Small runs. Real materials.
+    </p>
+    <a href="#" class="split__cta">Read more</a>
+  </div>
 </section>
 
-<section id="new" class="new">
-<div class="section-head"><h1>NEW ARRIVALS</h1><a href="#">VIEW ALL →</a></div>
-<div class="showcase"><img src="assets/images/products-campaign.jpg" alt="KRAFS new arrivals and Fall Winter campaign"></div>
-<div class="quick-row"><button data-product="KRAFS Graffiti Hoodie">QUICK SHOP</button><button data-product="KRAFS Art Tee">QUICK SHOP</button><button data-product="KRAFS Cargo Pants">QUICK SHOP</button><button data-product="KRAFS Trucker Hat">QUICK SHOP</button></div>
+<!-- ============================================================
+     NEW ARRIVALS
+     ============================================================ -->
+<section class="section" id="new" aria-labelledby="new-title">
+  <div class="section__head">
+    <div>
+      <span class="eyebrow"><span class="eyebrow__num">02</span> Just Landed</span>
+      <h2 class="section__title" id="new-title">New Arrivals</h2>
+    </div>
+    <a href="#" class="section__link">View all</a>
+  </div>
+
+  <div class="grid">
+    <article class="card">
+      <div class="card__media">
+        <span class="card__tag">New</span>
+        <img src="images/new-hoodie.jpg" alt="KRAFS new product 1" loading="lazy" class="site-photo">
+        <button class="card__quick">Quick add</button>
+      </div>
+      <div class="card__info">
+        <h3 class="card__name">KRAFS Black Pullover Hoodie</h3>
+        <span class="card__price">$120</span>
+        <div class="card__swatches" aria-label="Available colors">
+          <span class="card__swatch sw-blk"></span>
+          <span class="card__swatch sw-cha"></span>
+          <span class="card__swatch sw-oat"></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card__media">
+        <span class="card__tag">New</span>
+        <img src="images/new-tee.jpg" alt="KRAFS new product 2" loading="lazy" class="site-photo">
+        <button class="card__quick">Quick add</button>
+      </div>
+      <div class="card__info">
+        <h3 class="card__name">KRAFS White Graphic Tee</h3>
+        <span class="card__price">$45</span>
+        <div class="card__swatches" aria-label="Available colors">
+          <span class="card__swatch sw-wht"></span>
+          <span class="card__swatch sw-blk"></span>
+          <span class="card__swatch sw-oat"></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card__media">
+        <span class="card__tag">New</span>
+        <img src="images/new-white-hoodie.jpg" alt="KRAFS new product 3" loading="lazy" class="site-photo">
+        <button class="card__quick">Quick add</button>
+      </div>
+      <div class="card__info">
+        <h3 class="card__name">KRAFS White All-Over Hoodie</h3>
+        <span class="card__price">$95</span>
+        <div class="card__swatches" aria-label="Available colors">
+          <span class="card__swatch sw-blk"></span>
+          <span class="card__swatch sw-oli"></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card__media">
+        <span class="card__tag">New</span>
+        <img src="images/new-mens-tee.jpg" alt="KRAFS new product 4" loading="lazy" class="site-photo">
+        <button class="card__quick">Quick add</button>
+      </div>
+      <div class="card__info">
+        <h3 class="card__name">KRAFS Men’s Graphic Tee</h3>
+        <span class="card__price">$35</span>
+        <div class="card__swatches" aria-label="Available colors">
+          <span class="card__swatch sw-blk"></span>
+          <span class="card__swatch sw-wht"></span>
+          <span class="card__swatch sw-nav"></span>
+        </div>
+      </div>
+    </article>
+  </div>
 </section>
 
-<section id="originals" class="letters">
-<img src="assets/images/krafs-banner.jpg" alt="K Kreating R Real A Art F From S Scratch graffiti artwork">
+<!-- ============================================================
+     CATEGORY TILES
+     ============================================================ -->
+<section aria-labelledby="cat-title">
+  <h2 id="cat-title" class="visually-hidden">Shop by category</h2>
+  <div class="cats">
+    <a href="#men" class="cat">
+      <img src="images/men.jpg" alt="KRAFS men collection" loading="lazy" class="site-photo">
+      <div class="cat__overlay"></div>
+      <div class="cat__top"><span>01</span><span>32 items</span></div>
+      <div class="cat__label"><span class="cat__name">Men</span><span class="cat__arrow">→</span></div>
+    </a>
+
+    <a href="#women" class="cat">
+      <img src="images/women.jpg" alt="KRAFS women collection" loading="lazy" class="site-photo">
+      <div class="cat__overlay"></div>
+      <div class="cat__top"><span>02</span><span>24 items</span></div>
+      <div class="cat__label"><span class="cat__name">Women</span><span class="cat__arrow">→</span></div>
+    </a>
+
+    <a href="#accessories" class="cat">
+      <img src="images/accessories.jpg" alt="KRAFS accessories collection" loading="lazy" class="site-photo">
+      <div class="cat__overlay"></div>
+      <div class="cat__top"><span>03</span><span>18 items</span></div>
+      <div class="cat__label"><span class="cat__name">Accessories</span><span class="cat__arrow">→</span></div>
+    </a>
+  </div>
 </section>
 
-<section class="story">
-<div class="story-art">KRAFS<br><span>BOSTON</span></div>
-<div><p class="eyebrow">THE BRAND</p><h2>MORE THAN CLOTHING.<br>IT'S A MINDSET.</h2>
-<p>KRAFS stands for Kreating Real Art From Scratch. Born in Boston, KRAFS is built around creativity, individuality and turning original ideas into wearable art.</p>
-<p>Our clothing is made for people who would rather create their own style than follow somebody else's.</p>
-<a href="#">ABOUT KRAFS →</a></div>
+<!-- ============================================================
+     EDITORIAL BAND — pull quote
+     ============================================================ -->
+<section class="band" aria-labelledby="band-title">
+  <div class="band__bg" aria-hidden="true"><img src="images/quote.jpg" alt="" loading="lazy" class="site-photo"></div>
+  <div class="band__inner">
+    <p class="band__quote" id="band-title">
+      Made small, on purpose. Kept honest, by choice.
+    </p>
+    <div class="band__rule"></div>
+    <p class="band__attr">KRAFS — Boston, MA</p>
+  </div>
 </section>
 
-<section class="newsletter"><h2>JOIN THE LIST</h2><p>Get exclusive drops, early access and special offers.</p>
-<form id="signup"><input type="email" placeholder="Enter your email" required><button>SIGN UP →</button></form></section>
-</main>
+<!-- ============================================================
+     FEATURE — season
+     ============================================================ -->
+<section class="feature" aria-labelledby="fw-title">
+  <div class="feature__text">
+    <span class="eyebrow"><span class="eyebrow__num">03</span> Fall / Winter 2026</span>
+    <h2 class="feature__title" id="fw-title">The Fourth Volume.</h2>
+    <p class="feature__body">
+      Twenty-eight pieces built for the cold months. Heavier fleece, denser knits, considered outerwear. Available in limited quantities from November 1st.
+    </p>
+    <a href="#" class="feature__cta">Shop the collection</a>
+  </div>
+  <div class="feature__image"><img src="images/campaign.jpg" alt="KRAFS collection campaign" loading="lazy" class="site-photo"></div>
+</section>
 
-<footer>
-<a class="footer-brand" href="#">KRAFS</a>
-<div class="footer-links"><a href="#">About</a><a href="#">Contact</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Size Guide</a><a href="#">FAQ</a><a href="#">Privacy</a><a href="#">Terms</a></div>
-<div class="social">◎ &nbsp; ♪ &nbsp; ▶ &nbsp; f &nbsp; 𝕏</div>
-<div class="copyright">© 2026 KRAFS LLC. ALL RIGHTS RESERVED. <span>BOSTON, MA &nbsp; | &nbsp; CREATE DIFFERENT.</span></div>
+<!-- ============================================================
+     BEST SELLERS
+     ============================================================ -->
+<section class="section section--fog" id="best" aria-labelledby="best-title">
+  <div class="section__head">
+    <div>
+      <span class="eyebrow"><span class="eyebrow__num">04</span> Most Wanted</span>
+      <h2 class="section__title" id="best-title">Best Sellers</h2>
+    </div>
+    <a href="#" class="section__link">See all</a>
+  </div>
+
+  <div class="grid">
+    <article class="card">
+      <div class="card__media">
+        <img src="images/best-black-hoodie.jpg" alt="KRAFS best product 1" loading="lazy" class="site-photo">
+        <button class="card__quick">Quick add</button>
+      </div>
+      <div class="card__info">
+        <h3 class="card__name">KRAFS Black Graphic Hoodie</h3>
+        <span class="card__price">$140</span>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card__media">
+        <img src="images/best-pink-tee.jpg" alt="KRAFS best product 2" loading="lazy" class="site-photo">
+        <button class="card__quick">Quick add</button>
+      </div>
+      <div class="card__info">
+        <h3 class="card__name">KRAFS Pink Graphic Tee</h3>
+        <span class="card__price">$55</span>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card__media">
+        <img src="images/best-womens-tee.jpg" alt="KRAFS best product 3" loading="lazy" class="site-photo">
+        <button class="card__quick">Quick add</button>
+      </div>
+      <div class="card__info">
+        <h3 class="card__name">KRAFS Women’s Graphic Tee</h3>
+        <span class="card__price">$285</span>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card__media">
+        <img src="images/best-white-hoodie.jpg" alt="KRAFS best product 4" loading="lazy" class="site-photo">
+        <button class="card__quick">Quick add</button>
+      </div>
+      <div class="card__info">
+        <h3 class="card__name">KRAFS White Graphic Hoodie</h3>
+        <span class="card__price">$40</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============================================================
+     LOOKBOOK STRIP
+     ============================================================ -->
+<section class="lookbook" aria-labelledby="look-title">
+  <div class="section__head">
+    <div>
+      <span class="eyebrow"><span class="eyebrow__num">05</span> Follow Along</span>
+      <h2 class="section__title" id="look-title">@krafs</h2>
+    </div>
+    <a href="#" class="section__link">Instagram</a>
+  </div>
+
+  <div class="lookbook__grid">
+    <div class="look"><img src="images/look-1.jpg" alt="KRAFS lookbook photograph 1" loading="lazy" class="site-photo"></div>
+    <div class="look"><img src="images/look-2.jpg" alt="KRAFS lookbook photograph 2" loading="lazy" class="site-photo"></div>
+    <div class="look"><img src="images/look-3.jpg" alt="KRAFS lookbook photograph 3" loading="lazy" class="site-photo"></div>
+    <div class="look"><img src="images/look-4.jpg" alt="KRAFS lookbook photograph 4" loading="lazy" class="site-photo"></div>
+    <div class="look"><img src="images/look-5.jpg" alt="KRAFS lookbook photograph 5" loading="lazy" class="site-photo"></div>
+    <div class="look"><img src="images/look-6.jpg" alt="KRAFS lookbook photograph 6" loading="lazy" class="site-photo"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     NEWSLETTER
+     ============================================================ -->
+<section class="news" aria-labelledby="news-title">
+  <span class="eyebrow"><span class="eyebrow__num">06</span> Stay Close</span>
+  <h2 class="news__title" id="news-title">Join the list</h2>
+  <p class="news__sub">First access to new releases. Occasional dispatches from the studio. Nothing more.</p>
+  <div class="news__form" role="form">
+    <label class="visually-hidden" for="email">Email address</label>
+    <input class="news__input" type="email" id="email" placeholder="Email address" required>
+    <button class="news__submit" type="button">Subscribe</button>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer__grid">
+    <div>
+      <div class="footer__brand">KRAFS</div>
+      <p class="footer__tag">
+        Independent label. Boston, Massachusetts. Small runs, natural materials, considered pieces.
+      </p>
+    </div>
+
+    <div class="footer__col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">New</a></li>
+        <li><a href="#">Men</a></li>
+        <li><a href="#">Women</a></li>
+        <li><a href="#">Collections</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Archive</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Care</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h4>Studio</h4>
+      <ul>
+        <li><a href="#">The Story</a></li>
+        <li><a href="#">Journal</a></li>
+        <li><a href="#">Stockists</a></li>
+        <li><a href="#">Wholesale</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h4>Follow</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">Pinterest</a></li>
+        <li><a href="#">YouTube</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer__base">
+    <span>© 2026 KRAFS</span>
+    <span>Privacy · Terms · Accessibility</span>
+    <span>Boston, MA</span>
+  </div>
 </footer>
-<div id="toast"></div>
-<script src="js/main.js"></script>
-</body></html>
+
+</body>
+</html>
